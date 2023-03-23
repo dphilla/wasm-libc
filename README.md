@@ -1,6 +1,6 @@
 # wasm-libc
 
-Some generic libc bindings for Wasm 
+Some generic libc bindings in rust
 
 ## Description
 
