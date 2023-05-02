@@ -1,5 +1,10 @@
 //Some generic libc bindings
 //
+// for more, and extending: https://github.com/rust-lang/libc
+
+// returned memory representations are as if in C ( #[repr(C)] ), for system
+// compatibility.
+
 use core::ffi::c_ulong;
 //alias bc no libc for wasm targets :/
 // a la libc::{c_char, c_int, c_long, c_void, off_t, size_t, ssize_t, timespec, time_t};
@@ -75,8 +80,27 @@ pub extern "C" fn stat(path: *const c_char, buf: *mut c_void) -> c_int {
     unimplemented!();
 }
 
+#[repr(C)]
+pub struct stat {
+    pub st_dev: u64,        // ID of device containing file
+    pub st_ino: u64,        // inode number
+    pub st_mode: u16,       // protection
+    pub st_nlink: u16,      // number of hard links
+    pub st_uid: u32,        // user ID of owner
+    pub st_gid: u32,        // group ID of owner
+    pub st_rdev: u64,       // device ID (if special file)
+    pub st_size: i64,       // total size, in bytes
+    pub st_blksize: i32,    // blocksize for file system I/O
+    pub st_blocks: i64,     // number of 512B blocks allocated
+    pub st_atime: i64,      // time of last access
+    pub st_mtime: i64,      // time of last modification
+    pub st_ctime: i64,      // time of last status change
+}
+
 // retrieves information about a file descriptor
-pub extern "C" fn fstat(fd: c_int, buf: *mut c_void) -> c_int {
+pub extern "C" fn fstat(fd: c_int, stat: *mut c_void) -> c_int {
+    // this is where you make sure all returned memory representations are in C, for system
+    // compatibility. E.g. -- fill the  stat struct, return 0, or -1
     unimplemented!();
 }
 
